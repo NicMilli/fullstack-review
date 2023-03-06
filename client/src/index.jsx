@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import Search from './components/Search.jsx';
 import RepoList from './components/RepoList.jsx';
+import axios from 'axios';
 
 const App = () => {
 
@@ -10,7 +11,12 @@ const App = () => {
 
   const search = (term) => {
     console.log(`${term} was searched`);
-  }
+    const results = axios.post('/repos', {
+      username: 'user'
+  }, { headers: { "Content-Type": "application/json" } })
+    .then(function() {console.log('search')});
+
+  };
 
   return (
     <div>

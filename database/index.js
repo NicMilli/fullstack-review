@@ -10,6 +10,7 @@ db.once('open', function() {
 let repoSchema = mongoose.Schema({
   username: String,
   title: String,
+  id: Number,
   description: String,
   starCount: Number,
   forkCount: Number,
