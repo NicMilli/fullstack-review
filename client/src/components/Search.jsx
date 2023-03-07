@@ -9,8 +9,8 @@ const Search = ({ onSearch }) => {
   }
 
   const search = (e) => {
-
     onSearch(term);
+    setTerm('');
   }
 
   return (

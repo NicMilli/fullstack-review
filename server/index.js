@@ -13,20 +13,19 @@ app.use('/', express.static(path.join(__dirname, '../client/dist')));
 app.use(express.json());
 
 app.post('/repos', function (req, res) {
-
-  let repos = helpers.getReposByUsername(req.body)
+  helpers.getReposByUsername(req.body)
   .then((response) => {
-    console.log('then')
     db.save(response.data)
-    .then(() => {
-      res.sendStatus(201);
-    })
-    .catch((e) => {
-      res.sendStatus(401);
-    })
+    // .then(() => {
+    //   res.sendStatus(201);
+    // })
+    // .catch((e) => {
+    //   console.log('then')
+    //   res.sendStatus(401);
+    // })
     res.sendStatus(201);
-
-  }).catch((e) => {
+  })
+  .catch((e) => {
     res.status(404);
     res.send('Username not found!');
   });
@@ -37,11 +36,18 @@ app.post('/repos', function (req, res) {
 });
 
 app.get('/repos', function (req, res) {
-  console.log('GET req made');
+  db.find(req.query.user)
+  .then((data) => {
+      res.status(201);
+      res.send(data.repos.slice(0, 25));
+  })
+  .catch((e) => {
+    res.send('Could not find the requested user');
+  });
 
 });
 app.get('/allrepos', function (req, res) {
-  db.find()
+  db.findAll()
   .then((data) => {
     res.status(201);
     res.send(data);

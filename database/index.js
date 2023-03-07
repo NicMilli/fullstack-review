@@ -9,7 +9,7 @@ db.once('open', function() {
 });
 
 let repoSchema = mongoose.Schema({
-  title: String,
+  name: String,
   id: {
     type: Number,
     unique: true
@@ -27,7 +27,8 @@ let userSchema = mongoose.Schema({
     unique: true
   },
   avatar_url: String,
-  repos: [repoSchema],
+  html_url: String,
+  repos: [repoSchema]
 })
 
 // userSchema.methods.order = function() {
@@ -47,41 +48,47 @@ let User = mongoose.model('User', userSchema);
 
 let save = (repos) => {
   repos.sort((a, b) => {
-    if (a.stargazers_count > b.stargazers_count) {
+    if (a.stargazers_count + a.forks > b.stargazers_count + b.forks) {
       return -1;
-    } else if (a.stargazers_count > b.stargazers_count) {
+    } else if (a.stargazers_count + a.forks > b.stargazers_count + b.forks) {
       return 1;
     } else {
       return 0;
     }
   })
 
-  //Check if user exists?
   let username = repos[0].owner.login;
   let userId = repos[0].owner.id;
+  let url = repos[0].owner.html_url;
+  let avatar = repos[0].owner.avatar_url;
 
     let user = new User({
     username: username,
     id: userId,
-    repos: repos
+    repos: repos,
+    avatar_url: avatar,
+    html_url: url
     });
-    user.save(function(e) {
-      User.findOneAndUpdate({ username: 'NicMilli' }, {repos: repos})
-      .then(() => {
-
-      })
+    return user.save(function(e) {
+      return User.updateOne({ username }, {
+        repos: repos, avatar_url: avatar, html_url: url}).exec();
     });
 
 
 }
 
-let find = () => {
-  let user = User.findOne({ username: 'NicMilli' }).exec()
+let find = (username) => {
+  let user = User.findOne({ username: username }).exec();
 
-    //user.order();
     return user;
+}
 
+let findAll = (username) => {
+  let users = User.find({}).exec();
+
+    return users;
 }
 
 module.exports.find = find;
+module.exports.findAll = findAll;
 module.exports.save = save;

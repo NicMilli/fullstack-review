@@ -1,9 +1,13 @@
 import React from 'react';
+import RepoItem from './RepoItem.jsx';
 
-const RepoList = ({ repos }) => (
+const RepoList = ({ users }) => (
   <div>
-    <h4> Repo List Component </h4>
-    There are {repos.length} repos.
+
+    {users.map((user) => {
+      return <RepoItem data={user} key={user.id}/>
+    })}
+
   </div>
 )
 
