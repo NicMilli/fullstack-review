@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Promise = require('bluebird');
 mongoose.connect('mongodb://localhost/fetcher');
 
 const db = mongoose.connection;
@@ -8,34 +9,79 @@ db.once('open', function() {
 });
 
 let repoSchema = mongoose.Schema({
-  username: String,
   title: String,
-  id: Number,
-  description: String,
-  starCount: Number,
-  forkCount: Number,
-  url: String
+  id: {
+    type: Number,
+    unique: true
+  },
+  forks: Number,
+  stargazers_count: Number,
+  watchers: Number,
+  html_url: String
 });
 
-repoSchema.methods.order = function() {
-  this.repos.filter((a, b) => {
-    if (a.stars > b.stars) {
+let userSchema = mongoose.Schema({
+  username: String,
+  id: {
+    type: Number,
+    unique: true
+  },
+  avatar_url: String,
+  repos: [repoSchema],
+})
+
+// userSchema.methods.order = function() {
+//   this.repos.sort((a, b) => {
+//     if (a.stargazers_count > b.stargazers_count) {
+//       return -1;
+//     } else if (a.stargazers_count > b.stargazers_count) {
+//       return 1;
+//     } else {
+//       return 0;
+//     }
+//   })
+// };
+
+let Repo = mongoose.model('Repo', userSchema);
+let User = mongoose.model('User', userSchema);
+
+let save = (repos) => {
+  repos.sort((a, b) => {
+    if (a.stargazers_count > b.stargazers_count) {
       return -1;
-    } else if (a.stars > b.stars) {
+    } else if (a.stargazers_count > b.stargazers_count) {
       return 1;
     } else {
       return 0;
     }
   })
-};
 
-let Repo = mongoose.model('Repo', repoSchema);
-Repo.order();
+  //Check if user exists?
+  let username = repos[0].owner.login;
+  let userId = repos[0].owner.id;
 
-let save = (/* TODO */) => {
-  // TODO: Your code here
-  // This function should save a repo or repos to
-  // the MongoDB
+    let user = new User({
+    username: username,
+    id: userId,
+    repos: repos
+    });
+    user.save(function(e) {
+      User.findOneAndUpdate({ username: 'NicMilli' }, {repos: repos})
+      .then(() => {
+
+      })
+    });
+
+
 }
 
+let find = () => {
+  let user = User.findOne({ username: 'NicMilli' }).exec()
+
+    //user.order();
+    return user;
+
+}
+
+module.exports.find = find;
 module.exports.save = save;

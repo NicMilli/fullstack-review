@@ -9,7 +9,7 @@ const Search = ({ onSearch }) => {
   }
 
   const search = (e) => {
-    e.preventDefault();
+
     onSearch(term);
   }
 

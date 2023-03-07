@@ -12,7 +12,7 @@ const App = () => {
   const search = (term) => {
     console.log(`${term} was searched`);
     const results = axios.post('/repos', {
-      username: 'user'
+      username: term
   }, { headers: { "Content-Type": "application/json" } })
     .then(function() {console.log('search')});
 
