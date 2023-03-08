@@ -22,23 +22,25 @@ const App = () => {
 
   useEffect(() => {
     axios.get('/allrepos').then((response) => {
-      setUsers(response.data);
-      let newRepos = [];
-      response.data.map((user) => {
-        newRepos = newRepos.concat(user.repos);
-      });
-      newRepos.sort((a, b) => {
-        if (a.stargazers_count + a.forks > b.stargazers_count + b.forks) {
-          return -1;
-        } else if (a.stargazers_count + a.forks > b.stargazers_count + b.forks) {
-          return 1;
-        } else {
-          return 0;
-        }
-      })
-      setRepos(newRepos.slice(0, 25));
-      setPageRepos(newRepos.slice(0, 5));
-      toast.success('Users and repos fetched successfully');
+      if (Array.isArray(response.data)) {
+        setUsers(response.data);
+        let newRepos = [];
+        response.data.map((user) => {
+          newRepos = newRepos.concat(user.repos);
+        });
+        newRepos.sort((a, b) => {
+          if (a.stargazers_count + a.forks > b.stargazers_count + b.forks) {
+            return -1;
+          } else if (a.stargazers_count + a.forks > b.stargazers_count + b.forks) {
+            return 1;
+          } else {
+            return 0;
+          }
+        })
+        setRepos(newRepos.slice(0, 25));
+        setPageRepos(newRepos.slice(0, 5));
+        toast.success('Users and repos fetched successfully');
+      }
 
     }).catch((e) => {
       toast.error('Unable to fetch users and repos!');
