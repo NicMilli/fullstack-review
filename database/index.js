@@ -4,7 +4,10 @@ const { MongoClient, ServerApiVersion } = require('mongodb');
 
   const uri = process.env.MONGO_URI;
   try {
-    mongoose.connect(uri);
+    mongoose.connect(uri).then(() => {
+      console.log('Success connecting to database');
+    });
+
   } catch {
     console.log('Error connecting to database');
     mongoose.connect('mongodb://localhost/fetcher');
@@ -63,7 +66,10 @@ let save = (repos) => {
     html_url: url
     });
 
-    return user.save();
+    return user.save(function(e) {
+      return User.updateOne({ username }, {
+        repos: repos, avatar_url: avatar, html_url: url}).exec();
+    });
 }
 
 let find = (username) => {
