@@ -11,7 +11,6 @@ app.use('/', express.static(path.join(__dirname, '../client/dist')));
 app.post('/repos', function (req, res) {
   helpers.getReposByUsername(req.body)
   .then((response) => {
-    console.log(response.data)
     return db.save(response.data);
   }).then(() => {
       res.sendStatus(201);
