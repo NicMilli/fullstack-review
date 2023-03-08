@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Promise = require('bluebird');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 
-if (process.env.MODE === production) {
+if (process.env.MODE === 'production') {
   const uri = process.env.MONGO_URI;
   const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
   client.connect(err => {
