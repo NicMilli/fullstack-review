@@ -5,9 +5,10 @@ const RepoItem = ({ data }) => {
   const [clicked, setClicked] = useState(false);
   const [repos, setRepos] = useState({});
   const [page, setPage] = useState(1);
-  const [pages, setPages] = useState([...Array(Math.ceil(data.repos.length / 5) + 1).keys()].slice(1));
+  const [pages, setPages] = useState([]);
 
   const handleClick = (e) => {
+    setPages([...Array(Math.ceil(data.repos.length / 5) + 1).keys()].slice(1));
     setRepos(data.repos.slice((page * 5) - 5, (page * 5)));
     setClicked(prevState => !prevState);
   }
