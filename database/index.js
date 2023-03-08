@@ -7,8 +7,7 @@ if (process.env.MODE === 'production') {
   try {
     mongoose.connect(process.env.MONGO_URI);
   } catch {
-    console.log(`Error: ${error.message}`.red.underline.bold)
-    process.exit(1)
+    console.log('Error connecting to database')
   }
 } else {
   mongoose.connect('mongodb://localhost/fetcher');
