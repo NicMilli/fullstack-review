@@ -4,19 +4,20 @@ const { MongoClient, ServerApiVersion } = require('mongodb');
 
 if (process.env.MODE === 'production') {
   const uri = process.env.MONGO_URI;
-  const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
-  client.connect(err => {
-    console.log('MONGO connection error')
-  const collection = client.db("test").collection("devices");
-  // perform actions on the collection object
-  client.close();
-});
+  try {
+    const conn = mongoose.connect(process.env.MONGO_URI).then(
+      console.log(`MongoDB connected: ${conn.connection.host}`);
+    );
+  } catch {
+    console.log(`Error: ${error.message}`.red.underline.bold)
+    process.exit(1)
+  }
 } else {
   mongoose.connect('mongodb://localhost/fetcher');
 }
 
 
-const db = client || mongoose.connection;
+const db = mongoose.connection;
 
 let repoSchema = mongoose.Schema({
   name: String,
