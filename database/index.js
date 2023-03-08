@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Promise = require('bluebird');
 const dbLocation = process.env.MONGO_URI || 'mongodb://localhost/fetcher';
-mongoose.connect(`${dbLocation}`);
+mongoose.connect(dbLocation);
 
 const db = mongoose.connection;
 
