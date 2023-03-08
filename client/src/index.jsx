@@ -16,12 +16,16 @@ const App = () => {
   const [repos, setRepos] = useState([]);
   const [pageRepos, setPageRepos] = useState([]);
   const [clicked, setClicked] = useState(false);
-  const [update, setUpdate] = useState(false);
   const [page, setPage] = useState(1);
   const [pages, setPages] = useState([1, 2, 3, 4, 5]);
 
   useEffect(() => {
-    axios.get('/allrepos').then((response) => {
+    fetchUsers();
+
+  }, [])
+
+  const fetchUsers = () => {
+    return axios.get('/allrepos').then((response) => {
       if (Array.isArray(response.data)) {
         setUsers(response.data);
         let newRepos = [];
@@ -45,20 +49,18 @@ const App = () => {
     }).catch((e) => {
       toast.error('Unable to fetch users and repos!');
     });
-
-    if (update) {
-      setUpdate(false);
-    }
-  }, [])
+  }
 
   const search = (term) => {
     const results = axios.post('/repos', {
       username: term
   }, { headers: { "Content-Type": "application/json" } })
     .then(function() {
-      setUpdate(true);
+      return fetchUsers()
+    }).then(() => {
       toast.success('New user and repos added!');
-    }).catch((e) => {
+    }
+    ).catch((e) => {
       toast.error(`Unable to find user: ${e.message}`)
     });
 

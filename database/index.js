@@ -57,20 +57,26 @@ let save = (repos) => {
   let url = repos[0].owner.html_url;
   let avatar = repos[0].owner.avatar_url;
 
-    let user = new User({
-    username: username,
-    id: userId,
-    repos: repos,
-    avatar_url: avatar,
-    html_url: url
-    });
-
-    if (User.findOne({ username })) {
-      return User.updateOne({ username }, {
-        repos: repos, avatar_url: avatar, html_url: url}).exec();
+  User.exists({ username }).then((result) => {
+    if(result) {
+      return User.updateOne({ username },
+      {repos: repos, avatar_url: avatar, html_url: url}).exec();
     } else {
+      let user = new User({
+      username: username,
+      id: userId,
+      repos: repos,
+      avatar_url: avatar,
+      html_url: url
+      });
       return user.save().exec();
     }
+
+  }
+  ).catch((e) => {
+    console.log('error finding user');
+  })
+
 
 }
 
