@@ -2,16 +2,13 @@ const mongoose = require('mongoose');
 const Promise = require('bluebird');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 
-if (process.env.MODE === 'production') {
   const uri = process.env.MONGO_URI;
   try {
-    mongoose.connect(process.env.MONGO_URI);
+    mongoose.connect(uri);
   } catch {
-    console.log('Error connecting to database')
+    console.log('Error connecting to database');
+    mongoose.connect('mongodb://localhost/fetcher');
   }
-} else {
-  mongoose.connect('mongodb://localhost/fetcher');
-}
 
 
 const db = mongoose.connection;
