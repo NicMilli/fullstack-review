@@ -5,7 +5,7 @@ const helpers = require('../helpers/github')
 const db = require('../database/index')
 
 console.log(path.join(__dirname, '../client/dist'))
-express.static(path.join(__dirname, '../client/dist'));
+app.use('/', express.static(path.join(__dirname, '../client/dist')));
 app.use(express.json());
 
 app.post('/repos', function (req, res) {
