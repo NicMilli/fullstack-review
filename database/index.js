@@ -63,10 +63,7 @@ let save = (repos) => {
     html_url: url
     });
 
-    return user.save(function(e) {
-      return User.updateOne({ username }, {
-        repos: repos, avatar_url: avatar, html_url: url}).exec();
-    });
+    return user.save();
 }
 
 let find = (username) => {
@@ -76,9 +73,7 @@ let find = (username) => {
 }
 
 let findAll = (username) => {
-  let users = User.find({}).exec();
-
-    return users;
+  return User.find({}).exec();
 }
 
 module.exports.find = find;
