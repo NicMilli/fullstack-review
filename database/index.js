@@ -5,8 +5,9 @@ const { MongoClient, ServerApiVersion } = require('mongodb');
 if (process.env.MODE === 'production') {
   const uri = process.env.MONGO_URI;
   try {
-    const conn = mongoose.connect(process.env.MONGO_URI).then(
+    const conn = mongoose.connect(process.env.MONGO_URI).then((conn) => {
       console.log(`MongoDB connected: ${conn.connection.host}`);
+    };
     );
   } catch {
     console.log(`Error: ${error.message}`.red.underline.bold)
