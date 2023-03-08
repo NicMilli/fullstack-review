@@ -42,3 +42,18 @@ a:visited {
 .repoItem {
   margin-right: 10px;
 }
+
+.current {
+  color:  rgb(50, 0, 88);
+  text-decoration: underline;
+}
+
+.pageList {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.paginate {
+  margin: 5px;
+}

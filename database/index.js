@@ -1,12 +1,9 @@
 const mongoose = require('mongoose');
 const Promise = require('bluebird');
-mongoose.connect('mongodb://localhost/fetcher');
+const dbLocation = process.env.MONGO_URI || 'mongodb://localhost/fetcher';
+mongoose.connect(`${dbLocation}`);
 
 const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-  console.log('connected to MongoDB successfully');
-});
 
 let repoSchema = mongoose.Schema({
   name: String,
@@ -69,12 +66,11 @@ let save = (repos) => {
     avatar_url: avatar,
     html_url: url
     });
+
     return user.save(function(e) {
       return User.updateOne({ username }, {
         repos: repos, avatar_url: avatar, html_url: url}).exec();
     });
-
-
 }
 
 let find = (username) => {

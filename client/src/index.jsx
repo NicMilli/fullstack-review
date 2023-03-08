@@ -14,8 +14,11 @@ const App = () => {
 
   const [users, setUsers] = useState([]);
   const [repos, setRepos] = useState([]);
+  const [pageRepos, setPageRepos] = useState([]);
   const [clicked, setClicked] = useState(false);
   const [update, setUpdate] = useState(false);
+  const [page, setPage] = useState(1);
+  const [pages, setPages] = useState([1, 2, 3, 4, 5]);
 
   useEffect(() => {
     axios.get('/allrepos').then((response) => {
@@ -34,6 +37,7 @@ const App = () => {
         }
       })
       setRepos(newRepos.slice(0, 25));
+      setPageRepos(newRepos.slice(0, 5));
       toast.success('Users and repos fetched successfully');
 
     }).catch((e) => {
@@ -43,7 +47,7 @@ const App = () => {
     if (update) {
       setUpdate(false);
     }
-  }, [update])
+  }, [])
 
   const search = (term) => {
     const results = axios.post('/repos', {
@@ -58,20 +62,29 @@ const App = () => {
 
   };
 
+  const handlePage = (pageNum) => {
+    setPage(pageNum);
+    setPageRepos(repos.slice(((pageNum) * 5) - 5, ((pageNum) * 5)));
+  }
+
   return (
     <div>
       <h1>Github Fetcher</h1>
       <div>
         <Search onSearch={search}/>
         <p className='clickable' onClick={() => {setClicked(prevState => !prevState)}}>Overall top 25! {clicked ? <FaCaretUp/> : <FaCaretDown/>}</p>
-        {clicked ? repos.map((repo) => { return ( <div key={repo.id} className='repoList'>
+        {clicked ? <div> {pageRepos.map((repo) => { return ( <div key={repo.id} className='repoList'>
                 <a href={repo.html_url} target="_blank" className='clickable link repoItem'>{repo.name}</a>
                 <p className='repoItem'><FaUtensils /> {repo.forks}</p>
                 <p className='repoItem'><FaEye/> {repo.watchers}</p>
                 <p className='repoItem'><FaStar/> {repo.stargazers_count}</p>
               </div>
             )
-          }) : null}
+          })}
+           <div className='pageList'>
+        {pages.map((pageNo) => <p key={pageNo} onClick={(e) => {handlePage(pageNo)}} className={pageNo === page ? 'current clickable paginate' : 'clickable paginate'}>{pageNo}</p>)}
+      </div>
+      </div> : null}
         <RepoList users={users}/>
       </div>
       <ToastContainer />
