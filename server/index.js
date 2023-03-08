@@ -4,9 +4,9 @@ var path = require('path');
 const helpers = require('../helpers/github')
 const db = require('../database/index')
 
-console.log(path.join(__dirname, '../client/dist'))
-app.use('/', express.static(path.join(__dirname, '../client/dist')));
 app.use(express.json());
+app.use('/', express.static(path.join(__dirname, '../client/dist')));
+
 
 app.post('/repos', function (req, res) {
   helpers.getReposByUsername(req.body)
