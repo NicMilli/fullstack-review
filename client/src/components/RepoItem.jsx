@@ -3,7 +3,7 @@ import { FaCaretDown, FaUtensils, FaEye, FaStar, FaCaretUp} from "react-icons/fa
 
 const RepoItem = ({ data }) => {
   const [clicked, setClicked] = useState(false);
-  const [repos, setRepos] = useState({});
+  const [repos, setRepos] = useState([]);
   const [page, setPage] = useState(1);
   const [pages, setPages] = useState([]);
 
