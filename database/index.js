@@ -1,7 +1,19 @@
 const mongoose = require('mongoose');
 const Promise = require('bluebird');
-const dbLocation = process.env.MONGO_URI || 'mongodb://localhost/fetcher';
-mongoose.connect(dbLocation);
+const { MongoClient, ServerApiVersion } = require('mongodb');
+
+if (process.env.MODE === production) {
+  const uri = process.env.MONGO_URI;
+  const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+  client.connect(err => {
+  const collection = client.db("test").collection("devices");
+  // perform actions on the collection object
+  client.close();
+});
+} else {
+  mongoose.connect('mongodb://localhost/fetcher');
+}
+
 
 const db = mongoose.connection;
 
@@ -26,19 +38,7 @@ let userSchema = mongoose.Schema({
   avatar_url: String,
   html_url: String,
   repos: [repoSchema]
-})
-
-// userSchema.methods.order = function() {
-//   this.repos.sort((a, b) => {
-//     if (a.stargazers_count > b.stargazers_count) {
-//       return -1;
-//     } else if (a.stargazers_count > b.stargazers_count) {
-//       return 1;
-//     } else {
-//       return 0;
-//     }
-//   })
-// };
+});
 
 let Repo = mongoose.model('Repo', userSchema);
 let User = mongoose.model('User', userSchema);
@@ -52,7 +52,7 @@ let save = (repos) => {
     } else {
       return 0;
     }
-  })
+  });
 
   let username = repos[0].owner.login;
   let userId = repos[0].owner.id;
