@@ -3,12 +3,11 @@ const Promise = require('bluebird');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 
   const uri = process.env.MONGO_URI;
-  try {
-    mongoose.connect(uri).then(() => {
+  if (process.env.MODE === 'production') {
+     mongoose.connect(uri).then(() => {
       console.log('Success connecting to database');
     });
-
-  } catch {
+  } else {
     console.log('Error connecting to database');
     mongoose.connect('mongodb://localhost/fetcher');
   }
@@ -66,10 +65,13 @@ let save = (repos) => {
     html_url: url
     });
 
-    return user.save(function(e) {
+    if (User.findOne({ username })) {
       return User.updateOne({ username }, {
         repos: repos, avatar_url: avatar, html_url: url}).exec();
-    });
+    } else {
+      return user.save().exec();
+    }
+
 }
 
 let find = (username) => {
