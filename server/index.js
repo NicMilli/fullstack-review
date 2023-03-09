@@ -16,6 +16,7 @@ app.post('/repos', function (req, res) {
       res.sendStatus(201);
     })
   .catch((e) => {
+    console.log(e)
     res.status(404);
     res.send('Username not found!');
   });
