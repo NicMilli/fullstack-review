@@ -52,6 +52,7 @@ const App = () => {
   }
 
   const search = (term) => {
+    console.log(term);
     const results = axios.post('/repos', {
       username: term
   }, { headers: { "Content-Type": "application/json" } })
