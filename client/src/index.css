@@ -57,3 +57,10 @@ a:visited {
 .paginate {
   margin: 5px;
 }
+
+.searchButton {
+  background-color: rgb(50, 0, 88);
+  color: #b598b7;
+  border: 0px;
+  border-radius: 0.5rem;
+}

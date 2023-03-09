@@ -4,11 +4,8 @@ const { MongoClient, ServerApiVersion } = require('mongodb');
 
   const uri = process.env.MONGO_URI;
   if (process.env.MODE === 'production') {
-     mongoose.connect(uri).then(() => {
-      console.log('Success connecting to database');
-    });
+    mongoose.connect(uri);
   } else {
-    console.log('Error connecting to database');
     mongoose.connect('mongodb://localhost/fetcher');
   }
 

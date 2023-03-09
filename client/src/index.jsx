@@ -43,7 +43,6 @@ const App = () => {
         })
         setRepos(newRepos.slice(0, 25));
         setPageRepos(newRepos.slice(0, 5));
-        toast.success('Users and repos fetched successfully');
       }
 
     }).catch((e) => {
