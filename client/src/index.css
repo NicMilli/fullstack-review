@@ -63,4 +63,5 @@ a:visited {
   color: #b598b7;
   border: 0px;
   border-radius: 0.5rem;
+  cursor: pointer;
 }
