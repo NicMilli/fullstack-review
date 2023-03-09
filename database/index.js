@@ -42,6 +42,7 @@ let Repo = mongoose.model('Repo', userSchema);
 let User = mongoose.model('User', userSchema);
 
 let save = (repos) => {
+  console.log
   repos.sort((a, b) => {
     if (a.stargazers_count + a.forks > b.stargazers_count + b.forks) {
       return -1;
